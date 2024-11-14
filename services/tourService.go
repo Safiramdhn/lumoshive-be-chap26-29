@@ -17,3 +17,7 @@ func NewTourService(repository repositories.Repository[models.TourData]) *TourSe
 func (s *TourService) GetTourData(dateFilter time.Time, sortByPrice string, page, pageSize int) ([]models.TourData, int, error) {
 	return s.repository.GetTourData(dateFilter, sortByPrice, page, pageSize)
 }
+
+func (s *TourService) GetEventById(id int) (*models.TourData, error) {
+	return s.repository.GetByEventID(id)
+}

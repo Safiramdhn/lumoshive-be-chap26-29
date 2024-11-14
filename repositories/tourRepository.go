@@ -12,6 +12,7 @@ import (
 
 type Repository[T any] interface {
 	GetTourData(dateFilter time.Time, sortByPrice string, page, pageSize int) ([]models.TourData, int, error)
+	GetByEventID(eventID int) (*models.TourData, error)
 }
 
 type repository[T any] struct {
@@ -106,4 +107,23 @@ func (r *repository[T]) GetTourData(dateFilter time.Time, sortByPrice string, pa
 	}
 
 	return result, totalItems, nil
+}
+
+func (repo *repository[T]) GetByEventID(id int) (*models.TourData, error) {
+	var tourData models.TourData
+	var event models.Event
+	var destination models.Destination
+	query := `SELECT e.id, e.title, e.description, e.photo_url, e.price, e.date,
+			 d.name, d.location  FROM event e 
+			 JOIN destination d ON e.destination_id = d.id 
+			 WHERE e.id = $1`
+	err := repo.DB.QueryRow(query, id).Scan(&event.ID, &event.Title, &event.Description, &event.PhotoUrl, &event.Price, &event.Date, &destination.Name, &destination.Location)
+	if err != nil {
+		repo.Logger.Error("Error scanning row: " + err.Error())
+		return nil, err
+	}
+	tourData.Event = event
+	tourData.Destination = destination
+
+	return &tourData, nil
 }

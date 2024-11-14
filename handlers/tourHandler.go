@@ -1,22 +1,26 @@
 package handlers
 
 import (
+	"golang-beginner-chap28/models"
 	"golang-beginner-chap28/services"
 	"golang-beginner-chap28/utils"
 	"net/http"
 	"strconv"
 	"time"
 
+	"github.com/go-chi/chi/v5"
+	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 )
 
 type TourHandler struct {
-	TourService services.TourService
+	TourService *services.TourService
 	Logger      *zap.Logger
+	Validator   *validator.Validate
 }
 
-func NewTourHandler(tourService services.TourService, log *zap.Logger) *TourHandler {
-	return &TourHandler{TourService: tourService, Logger: log}
+func NewTourHandler(tourService *services.TourService, log *zap.Logger, validator *validator.Validate) *TourHandler {
+	return &TourHandler{TourService: tourService, Logger: log, Validator: validator}
 }
 
 var JsonResp = &utils.JSONResponse{}
@@ -71,4 +75,38 @@ func (h *TourHandler) GetTourDataHandler(w http.ResponseWriter, r *http.Request)
 	}
 	totalPage := totalItem / pageSize
 	JsonResp.SendPaginatedResponse(w, tours, page, pageSize, totalItem, totalPage, "Tour data successfully fetched")
+}
+
+func (h *TourHandler) GetTourDetailsHandler(w http.ResponseWriter, r *http.Request) {
+	var event models.Event
+	if r.Method != http.MethodGet {
+		h.Logger.Error("Method not allowed"+r.Method, zap.String("handler", "TourHandler"))
+		JsonResp.SendError(w, http.StatusMethodNotAllowed, "Method not allowed "+r.Method)
+		return
+	}
+
+	idParam := chi.URLParam(r, "id")
+	eventId, err := strconv.Atoi(idParam)
+	if err != nil {
+		h.Logger.Error("Error parsing event ID "+err.Error(), zap.String("handler", "TourHandler"))
+		JsonResp.SendError(w, http.StatusBadRequest, "Invalid event ID", err.Error())
+		return
+	}
+
+	event.ID = eventId
+	err = h.Validator.Struct(event)
+	if err != nil {
+		h.Logger.Error("Validation error for event "+err.Error(), zap.String("handler", "TourHandler"))
+		JsonResp.SendError(w, http.StatusBadRequest, "Validation error", err.Error())
+		return
+	}
+
+	tour, err := h.TourService.GetEventById(event.ID)
+	if err != nil {
+		h.Logger.Error("Error fetching tour details "+err.Error(), zap.String("handler", "TourHandler"))
+		JsonResp.SendError(w, http.StatusInternalServerError, "Error fetching tour details", err.Error())
+		return
+	}
+
+	JsonResp.SendSuccess(w, tour, "Tour details successfully fetched")
 }

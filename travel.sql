@@ -25,7 +25,6 @@ CREATE TABLE review (
 CREATE TABLE transaction (
     id SERIAL PRIMARY KEY,
     event_id INT REFERENCES event(id),
-    user_id INT,
     status VARCHAR(50),
     price DECIMAL(10, 2),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -87,15 +86,42 @@ VALUES
 
 
 -- Insert dummy transaction data with random event_id
-INSERT INTO transaction (event_id, user_id, status, price)
+INSERT INTO transaction (event_id, customer_id, status, price)
 VALUES
-(1, 101, 'Completed', 120.00),
-(3, 102, 'Pending', 250.00),
-(5, 103, 'Completed', 90.00),
-(7, 104, 'Cancelled', 300.00),
-(2, 105, 'Completed', 150.00),
-(4, 106, 'Pending', 200.00),
-(6, 107, 'Completed', 180.00),
-(8, 108, 'Cancelled', 120.00),
-(10, 109, 'Completed', 350.00),
-(9, 110, 'Pending', 250.00);
+(1, 1, 'Completed', 120.00),
+(3, 2, 'Pending', 250.00),
+(5, 3, 'Completed', 90.00),
+(7, 4, 'Cancelled', 300.00),
+(2, 5, 'Completed', 150.00),
+(4, 6, 'Pending', 200.00),
+(6, 7, 'Completed', 180.00),
+(8, 8, 'Cancelled', 120.00),
+(10, 9, 'Completed', 350.00),
+(9, 10, 'Pending', 250.00);
+
+CREATE TABLE customer (
+	id SERIAL PRIMARY KEY,
+	email varchar not null,
+	phone_number varchar not null
+)
+
+ALTER TABLE customer ADD COLUMN name varchar not null
+
+ALTER TABLE transaction
+ADD COLUMN customer_id INT REFERENCES customer(id);
+
+ALTER TABLE transaction
+ADD COLUMN number_of_ticket INT
+
+INSERT INTO customer (name, email, phone_number)
+VALUES
+('Alice', 'alice@example.com', '1234567890'),
+('Bob', 'bob@example.com', '0987654321'),
+('Charlie', 'charlie@example.com', '1112223333'),
+('Diana', 'diana@example.com', '4445556666'),
+('Eve', 'eve@example.com', '7778889999'),
+('Frank', 'frank@example.com', '1010101010'),
+('Grace', 'grace@example.com', '1212121212'),
+('Heidi', 'heidi@example.com', '1313131313'),
+('Ivan', 'ivan@example.com', '1414141414'),
+('Judy', 'judy@example.com', '1515151515');
