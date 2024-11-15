@@ -2,7 +2,8 @@ CREATE TABLE destination (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     location VARCHAR(100),
-    description TEXT
+    description TEXT,
+	map_latlong TEXT
 );
 
 CREATE TABLE event (
@@ -31,23 +32,24 @@ CREATE TABLE transaction (
 );
 
 -- Insert dummy data into the destination table
-INSERT INTO destination (name, location, description)
+INSERT INTO destination (name, location, description, map_latlong)
 VALUES
-('Paris', 'France', 'The capital city of France, known for its art, fashion, and culture.'),
-('Tokyo', 'Japan', 'A vibrant city known for its skyscrapers, shopping, and technology.'),
-('New York', 'USA', 'A bustling metropolis, home to landmarks such as Times Square and Central Park.'),
-('Sydney', 'Australia', 'Famous for its stunning harbor, opera house, and beaches.'),
-('London', 'UK', 'The capital city of the UK, rich in history and culture, with landmarks like Big Ben.'),
-('Rome', 'Italy', 'Known for its ancient ruins, such as the Colosseum and the Roman Forum.'),
-('Dubai', 'UAE', 'A luxurious city known for its modern architecture, shopping, and skyscrapers.'),
-('Bangkok', 'Thailand', 'Famous for its vibrant street life, temples, and delicious food.'),
-('Barcelona', 'Spain', 'A city with rich history, known for its unique architecture and Mediterranean beaches.'),
-('Rio de Janeiro', 'Brazil', 'Known for its Carnival festival, beaches, and the Christ the Redeemer statue.'),
-('Moscow', 'Russia', 'Capital city of Russia, famous for Red Square, the Kremlin, and its history.'),
-('Los Angeles', 'USA', 'Known for Hollywood, entertainment, and its beaches.'),
-('Cairo', 'Egypt', 'Home to the Pyramids of Giza and a long history of ancient civilization.'),
-('Cape Town', 'South Africa', 'A coastal city known for its beaches, mountains, and vineyards.'),
-('Istanbul', 'Turkey', 'A city that straddles Europe and Asia, rich in culture, history, and architecture.');
+('Paris', 'France', 'The capital city of France, known for its art, fashion, and culture.', '48.8566,2.3522'),
+('Tokyo', 'Japan', 'A vibrant city known for its skyscrapers, shopping, and technology.', '35.6895,139.6917'),
+('New York', 'USA', 'A bustling metropolis, home to landmarks such as Times Square and Central Park.', '40.7128,-74.0060'),
+('Sydney', 'Australia', 'Famous for its stunning harbor, opera house, and beaches.', '-33.8688,151.2093'),
+('London', 'UK', 'The capital city of the UK, rich in history and culture, with landmarks like Big Ben.', '51.5074,-0.1278'),
+('Rome', 'Italy', 'Known for its ancient ruins, such as the Colosseum and the Roman Forum.', '41.9028,12.4964'),
+('Dubai', 'UAE', 'A luxurious city known for its modern architecture, shopping, and skyscrapers.', '25.2048,55.2708'),
+('Bangkok', 'Thailand', 'Famous for its vibrant street life, temples, and delicious food.', '13.7563,100.5018'),
+('Barcelona', 'Spain', 'A city with rich history, known for its unique architecture and Mediterranean beaches.', '41.3851,2.1734'),
+('Rio de Janeiro', 'Brazil', 'Known for its Carnival festival, beaches, and the Christ the Redeemer statue.', '-22.9068,-43.1729'),
+('Moscow', 'Russia', 'Capital city of Russia, famous for Red Square, the Kremlin, and its history.', '55.7558,37.6176'),
+('Los Angeles', 'USA', 'Known for Hollywood, entertainment, and its beaches.', '34.0522,-118.2437'),
+('Cairo', 'Egypt', 'Home to the Pyramids of Giza and a long history of ancient civilization.', '30.0444,31.2357'),
+('Cape Town', 'South Africa', 'A coastal city known for its beaches, mountains, and vineyards.', '-33.9249,18.4241'),
+('Istanbul', 'Turkey', 'A city that straddles Europe and Asia, rich in culture, history, and architecture.', '41.0082,28.9784');
+
 
 -- Insert dummy data into the event table
 INSERT INTO event (destination_id, date, title, description, price)
@@ -125,3 +127,90 @@ VALUES
 ('Heidi', 'heidi@example.com', '1313131313'),
 ('Ivan', 'ivan@example.com', '1414141414'),
 ('Judy', 'judy@example.com', '1515151515');
+
+ALTER TABLE destination ADD COLUMN map TEXT
+
+CREATE TABLE tour_plan (
+	id SERIAL PRIMARY KEY,
+	event_id INTEGER REFERENCES event(id),
+	activities TEXT[],
+	description VARCHAR
+);
+
+-- Insert sample data into the tour_plan table
+INSERT INTO tour_plan (event_id, activities, description)
+VALUES
+-- Paris Fashion Week
+(1, ARRAY['Arrival in Paris', 'Check-in at 5-Star Hotel', 'Welcome Dinner'], 'Day 1: Arrival and check-in. Enjoy a welcome dinner.'),
+(1, ARRAY['Paris Fashion Week Attendance', 'Private Fashion Boutique Tour'], 'Day 2: Attend Paris Fashion Week shows and explore exclusive boutiques.'),
+(1, ARRAY['Guided Louvre Museum Tour', 'Eiffel Tower Evening Visit'], 'Day 3: Discover the Louvre’s masterpieces and visit the Eiffel Tower at night.'),
+
+-- Tokyo Tech Expo
+(2, ARRAY['Arrival in Tokyo', 'Check-in at luxury hotel'], 'Day 1: Arrival and hotel check-in in Tokyo.'),
+(2, ARRAY['Tokyo Tech Expo - Day 1', 'Networking Lunch'], 'Day 2: Attend the first day of the Tokyo Tech Expo.'),
+(2, ARRAY['Tokyo Tech Expo - Day 2', 'Dinner at Robot Restaurant'], 'Day 3: Attend the second day of the Expo and enjoy a unique dining experience.'),
+
+-- New York Christmas Parade
+(3, ARRAY['Arrival in New York', 'Check-in at Times Square Hotel'], 'Day 1: Arrival and check-in at a hotel in Times Square.'),
+(3, ARRAY['Christmas Parade Viewing', 'Rockefeller Center Ice Skating'], 'Day 2: Watch the Christmas Parade and go ice skating at Rockefeller Center.'),
+(3, ARRAY['Broadway Show', 'Farewell Dinner'], 'Day 3: Enjoy a Broadway show and farewell dinner.'),
+
+-- Sydney Opera Performance
+(4, ARRAY['Arrival in Sydney', 'Check-in at Sydney Harbor Hotel'], 'Day 1: Arrival and check-in with a view of Sydney Harbor.'),
+(4, ARRAY['Sydney Opera House Tour', 'Opera Performance'], 'Day 2: Explore the Opera House and attend an opera performance.'),
+(4, ARRAY['Bondi Beach Visit', 'Shopping in The Rocks'], 'Day 3: Relax at Bondi Beach and shop in the historic Rocks area.'),
+
+-- London Winter Wonderland
+(5, ARRAY['Arrival in London', 'Check-in at Central London Hotel'], 'Day 1: Arrival in London and hotel check-in.'),
+(5, ARRAY['Winter Wonderland Visit', 'Ice Skating and Christmas Markets'], 'Day 2: Enjoy the Winter Wonderland with skating and shopping at Christmas markets.'),
+(5, ARRAY['London Sightseeing Tour', 'Afternoon Tea Experience'], 'Day 3: Sightseeing around London and traditional afternoon tea.'),
+
+-- Rome Ancient Ruins Tour
+(6, ARRAY['Arrival in Rome', 'Check-in at historic hotel'], 'Day 1: Arrival in Rome and check-in at a historic hotel.'),
+(6, ARRAY['Ancient Ruins Guided Tour', 'Visit to the Colosseum'], 'Day 2: Explore the ancient ruins of Rome, including the Colosseum.'),
+(6, ARRAY['Vatican City Tour', 'Dinner at local Italian restaurant'], 'Day 3: Visit Vatican City and enjoy an authentic Italian dinner.'),
+
+-- Dubai Luxury Shopping Festival
+(7, ARRAY['Arrival in Dubai', 'Check-in at luxury hotel'], 'Day 1: Arrival and luxury hotel check-in in Dubai.'),
+(7, ARRAY['Shopping at Dubai Mall', 'Visit to Burj Khalifa'], 'Day 2: Shop at Dubai Mall and visit the Burj Khalifa.'),
+(7, ARRAY['Luxury Desert Safari', 'Dinner at desert camp'], 'Day 3: Enjoy a luxury desert safari and dinner under the stars.'),
+
+-- Bangkok Street Food Festival
+(8, ARRAY['Arrival in Bangkok', 'Check-in at city center hotel'], 'Day 1: Arrival and check-in at a central Bangkok hotel.'),
+(8, ARRAY['Street Food Festival', 'Temple Visit'], 'Day 2: Attend the Street Food Festival and visit famous temples.'),
+(8, ARRAY['Floating Market Tour', 'Thai Cooking Class'], 'Day 3: Visit a floating market and take a Thai cooking class.'),
+
+-- Barcelona Beach Party
+(9, ARRAY['Arrival in Barcelona', 'Check-in at beachside hotel'], 'Day 1: Arrival in Barcelona and check-in at a beachside hotel.'),
+(9, ARRAY['Beach Party', 'Live Music and Dance'], 'Day 2: Join the beach party with live music and dancing by the sea.'),
+(9, ARRAY['City Tour', 'Sagrada Familia Visit'], 'Day 3: Explore the city and visit the famous Sagrada Familia.'),
+
+-- Rio Carnival Parade
+(10, ARRAY['Arrival in Rio', 'Check-in at hotel near Copacabana Beach'], 'Day 1: Arrival in Rio and check-in at a hotel near Copacabana Beach.'),
+(10, ARRAY['Attend Rio Carnival Parade', 'Samba Dance Class'], 'Day 2: Watch the Rio Carnival Parade and learn Samba dancing.'),
+(10, ARRAY['Christ the Redeemer Tour', 'Sugarloaf Mountain Cable Car'], 'Day 3: Visit Christ the Redeemer and take a cable car up Sugarloaf Mountain.'),
+
+-- Moscow Winter Market
+(11, ARRAY['Arrival in Moscow', 'Check-in at city center hotel'], 'Day 1: Arrival and check-in at a central Moscow hotel.'),
+(11, ARRAY['Visit Moscow Winter Market', 'Kremlin Tour'], 'Day 2: Explore the Moscow Winter Market and take a Kremlin tour.'),
+(11, ARRAY['Red Square Tour', 'Traditional Russian Dinner'], 'Day 3: Visit Red Square and enjoy a traditional Russian dinner.'),
+
+-- Los Angeles Film Festival
+(12, ARRAY['Arrival in Los Angeles', 'Check-in at hotel near Hollywood'], 'Day 1: Arrival in LA and check-in near Hollywood.'),
+(12, ARRAY['Film Festival Opening', 'Q&A with Filmmakers'], 'Day 2: Attend the film festival opening and Q&A session.'),
+(12, ARRAY['Hollywood Tour', 'Walk of Fame Visit'], 'Day 3: Tour Hollywood and visit the Walk of Fame.'),
+
+-- Cairo Pyramids Light Show
+(13, ARRAY['Arrival in Cairo', 'Check-in at Giza hotel'], 'Day 1: Arrival in Cairo and check-in near the Pyramids of Giza.'),
+(13, ARRAY['Pyramids Light Show', 'Dinner with Nile View'], 'Day 2: Watch the Pyramids Light Show and enjoy a Nile-view dinner.'),
+(13, ARRAY['Museum of Egyptian Antiquities', 'Shopping at Khan el-Khalili Bazaar'], 'Day 3: Visit the museum and shop at the historic bazaar.'),
+
+-- Cape Town Wine Tasting
+(14, ARRAY['Arrival in Cape Town', 'Check-in at vineyard hotel'], 'Day 1: Arrival and check-in at a vineyard hotel in Cape Town.'),
+(14, ARRAY['Wine Tasting Tour', 'Cape Peninsula Tour'], 'Day 2: Take a wine-tasting tour and explore the Cape Peninsula.'),
+(14, ARRAY['Table Mountain Visit', 'Dinner at seaside restaurant'], 'Day 3: Visit Table Mountain and have dinner by the sea.'),
+
+-- Istanbul Cultural Fest
+(15, ARRAY['Arrival in Istanbul', 'Check-in at historic hotel'], 'Day 1: Arrival in Istanbul and check-in at a historic hotel.'),
+(15, ARRAY['Cultural Festival Activities', 'Turkish Cuisine Tasting'], 'Day 2: Participate in cultural activities and taste Turkish cuisine.'),
+(15, ARRAY['Bosphorus Cruise', 'Shopping at Grand Bazaar'], 'Day 3: Take a Bosphorus cruise and shop at the Grand Bazaar.');
