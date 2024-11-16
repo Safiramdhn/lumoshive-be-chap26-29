@@ -1,19 +1,30 @@
 package main
 
 import (
+	"golang-beginner-chap28/config"
 	"golang-beginner-chap28/routers"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func main() {
+	// Initialize configuration and router
+	configViper := config.InitViper()
 	r := routers.NewRouter()
 
-	log.Println("Server started on port 8080")
-	if err := http.ListenAndServe(":8080", r); err != nil {
-		log.Fatalf("Error starting server: %v\n", err)
-		log.Fatalf("Error starting server: %v\n", err.Error())
+	// Determine server port
+	port := configViper.GetInt("PORT")
+	if port == 0 {
+		port = 8081 // Default port
 	}
+	portStr := ":" + strconv.Itoa(port)
 
-	http.ListenAndServe(":8080", r)
+	// Log server startup
+	log.Printf("Server started on port %d", port)
+
+	// Start the server
+	if err := http.ListenAndServe(portStr, r); err != nil {
+		log.Fatalf("Error starting server: %v", err)
+	}
 }

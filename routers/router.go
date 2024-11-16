@@ -31,12 +31,17 @@ func NewRouter() chi.Router {
 	tourPlanService := services.NewTourPlanService(*tourPlanRepo)
 	tourPlanHandler := handlers.NewTourPlanHandler(tourPlanService, log, validator)
 
+	destinationRepo := repositories.NewDestinationRepository(db, log)
+	destinationService := services.NewDestinationService(*destinationRepo)
+	destinationHandler := handlers.NewDestinationHandler(*destinationService, log, validator)
+
 	r.Route("/api", func(r chi.Router) {
 		r.Route("/tour", func(r chi.Router) {
 			r.Get("/", tourHandler.GetTourDataHandler)
 			r.Route("/{id}", func(r chi.Router) {
 				r.Get("/", tourHandler.GetTourDetailsHandler)
 				r.Get("/tour-plan", tourPlanHandler.GetTourPlanHandler)
+				r.Get("/location", destinationHandler.GetDestinationLocationHandler)
 			})
 		})
 

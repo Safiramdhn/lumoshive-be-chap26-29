@@ -6,5 +6,5 @@ type Destination struct {
 	Location    string  `json:"location,omitempty"`
 	Description string  `json:"description,omitempty"`
 	Price       float64 `json:"price,omitempty"`
-	Map         string  `json:"map,omitempty"`
+	MapUrl      string  `json:"map_url,omitempty"`
 }
