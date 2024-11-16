@@ -3,7 +3,7 @@ CREATE TABLE destination (
     name VARCHAR(100) NOT NULL,
     location VARCHAR(100),
     description TEXT,
-	map_latlong TEXT
+	map_url TEXT
 );
 
 CREATE TABLE event (
@@ -32,24 +32,23 @@ CREATE TABLE transaction (
 );
 
 -- Insert dummy data into the destination table
-INSERT INTO destination (name, location, description, map_latlong)
+INSERT INTO destination (name, location, description, map_url)
 VALUES
-('Paris', 'France', 'The capital city of France, known for its art, fashion, and culture.', '48.8566,2.3522'),
-('Tokyo', 'Japan', 'A vibrant city known for its skyscrapers, shopping, and technology.', '35.6895,139.6917'),
-('New York', 'USA', 'A bustling metropolis, home to landmarks such as Times Square and Central Park.', '40.7128,-74.0060'),
-('Sydney', 'Australia', 'Famous for its stunning harbor, opera house, and beaches.', '-33.8688,151.2093'),
-('London', 'UK', 'The capital city of the UK, rich in history and culture, with landmarks like Big Ben.', '51.5074,-0.1278'),
-('Rome', 'Italy', 'Known for its ancient ruins, such as the Colosseum and the Roman Forum.', '41.9028,12.4964'),
-('Dubai', 'UAE', 'A luxurious city known for its modern architecture, shopping, and skyscrapers.', '25.2048,55.2708'),
-('Bangkok', 'Thailand', 'Famous for its vibrant street life, temples, and delicious food.', '13.7563,100.5018'),
-('Barcelona', 'Spain', 'A city with rich history, known for its unique architecture and Mediterranean beaches.', '41.3851,2.1734'),
-('Rio de Janeiro', 'Brazil', 'Known for its Carnival festival, beaches, and the Christ the Redeemer statue.', '-22.9068,-43.1729'),
-('Moscow', 'Russia', 'Capital city of Russia, famous for Red Square, the Kremlin, and its history.', '55.7558,37.6176'),
-('Los Angeles', 'USA', 'Known for Hollywood, entertainment, and its beaches.', '34.0522,-118.2437'),
-('Cairo', 'Egypt', 'Home to the Pyramids of Giza and a long history of ancient civilization.', '30.0444,31.2357'),
-('Cape Town', 'South Africa', 'A coastal city known for its beaches, mountains, and vineyards.', '-33.9249,18.4241'),
-('Istanbul', 'Turkey', 'A city that straddles Europe and Asia, rich in culture, history, and architecture.', '41.0082,28.9784');
-
+('Paris', 'France', 'The capital city of France, known for its art, fashion, and culture.', 'https://www.google.com/maps?q=48.8566,2.3522'),
+('Tokyo', 'Japan', 'A vibrant city known for its skyscrapers, shopping, and technology.', 'https://www.google.com/maps?q=35.6895,139.6917'),
+('New York', 'USA', 'A bustling metropolis, home to landmarks such as Times Square and Central Park.', 'https://www.google.com/maps?q=40.7128,-74.0060'),
+('Sydney', 'Australia', 'Famous for its stunning harbor, opera house, and beaches.', 'https://www.google.com/maps?q=-33.8688,151.2093'),
+('London', 'UK', 'The capital city of the UK, rich in history and culture, with landmarks like Big Ben.', 'https://www.google.com/maps?q=51.5074,-0.1278'),
+('Rome', 'Italy', 'Known for its ancient ruins, such as the Colosseum and the Roman Forum.', 'https://www.google.com/maps?q=41.9028,12.4964'),
+('Dubai', 'UAE', 'A luxurious city known for its modern architecture, shopping, and skyscrapers.', 'https://www.google.com/maps?q=25.2048,55.2708'),
+('Bangkok', 'Thailand', 'Famous for its vibrant street life, temples, and delicious food.', 'https://www.google.com/maps?q=13.7563,100.5018'),
+('Barcelona', 'Spain', 'A city with rich history, known for its unique architecture and Mediterranean beaches.', 'https://www.google.com/maps?q=41.3851,2.1734'),
+('Rio de Janeiro', 'Brazil', 'Known for its Carnival festival, beaches, and the Christ the Redeemer statue.', 'https://www.google.com/maps?q=-22.9068,-43.1729'),
+('Moscow', 'Russia', 'Capital city of Russia, famous for Red Square, the Kremlin, and its history.', 'https://www.google.com/maps?q=55.7558,37.6176'),
+('Los Angeles', 'USA', 'Known for Hollywood, entertainment, and its beaches.', 'https://www.google.com/maps?q=34.0522,-118.2437'),
+('Cairo', 'Egypt', 'Home to the Pyramids of Giza and a long history of ancient civilization.', 'https://www.google.com/maps?q=30.0444,31.2357'),
+('Cape Town', 'South Africa', 'A coastal city known for its beaches, mountains, and vineyards.', 'https://www.google.com/maps?q=-33.9249,18.4241'),
+('Istanbul', 'Turkey', 'A city that straddles Europe and Asia, rich in culture, history, and architecture.', 'https://www.google.com/maps?q=41.0082,28.9784');
 
 -- Insert dummy data into the event table
 INSERT INTO event (destination_id, date, title, description, price)
